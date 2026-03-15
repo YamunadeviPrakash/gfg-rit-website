@@ -6,10 +6,12 @@ import sqlite3
 import hashlib
 from datetime import datetime
 import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 CORS(app)
-genai.configure(api_key="AIzaSyBWv39MadmnotF5PCML0hw1oIXw2HQThVU")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 for m in genai.list_models():
