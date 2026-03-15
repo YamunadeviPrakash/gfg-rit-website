@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-light: #263548;
+  --green: #00ff9c;
+  --accent: #38bdf8;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--green);
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Grid background */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(0,255,156,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,156,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glow effects */
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 156, 0.3);
+}
+.glow-green:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 156, 0.5);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(0, 255, 156, 0.5);
+}
+
+/* Code block styling */
+pre {
+  background: #0d1b2a;
+  border: 1px solid #1e3a5f;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: #1e293b;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #00ff9c;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  color: #e2e8f0;
+}
+
+/* Card hover */
+.card-hover {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.card-hover:hover {
+  border-color: rgba(0, 255, 156, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 255, 156, 0.1);
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #00ff9c, #00d47e);
+  color: #0f172a;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 156, 0.4);
+}
+
+.btn-outline {
+  border: 1px solid rgba(0,255,156,0.5);
+  color: #00ff9c;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: transparent;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: rgba(0,255,156,0.1);
+  border-color: #00ff9c;
+}
+
+/* Badge */
+.badge-easy { color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+.badge-medium { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+.badge-hard { color: #f87171; background: rgba(248, 113, 113, 0.1); }
+
+/* Markdown styles */
+.markdown h1, .markdown h2, .markdown h3 {
+  color: #00ff9c;
+  margin: 1rem 0 0.5rem;
+}
+.markdown p { margin: 0.5rem 0; line-height: 1.7; }
+.markdown ul, .markdown ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+.markdown li { margin: 0.25rem 0; }
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.875rem;
+}
+.markdown th {
+  background: #1e293b;
+  color: #00ff9c;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #334155;
+  text-align: left;
+}
+.markdown td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #334155;
+}
+.markdown strong { color: #38bdf8; }
+
+/* Loader */
+.loader {
+  border: 3px solid #1e293b;
+  border-top: 3px solid #00ff9c;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Typing indicator */
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background: #00ff9c;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
