@@ -17,9 +17,6 @@ CORS(app)
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-for m in genai.list_models():
-    print(m.name, " -> ", m.supported_generation_methods)
-
 DB_PATH = os.path.join(os.path.dirname(__file__), 'database.db')
 
 def get_db():
@@ -45,7 +42,7 @@ def ensure_today_problem():
         conn.execute("UPDATE dsa_problems SET is_today=0 WHERE date != ?",(today,))
 
     conn.commit()
-    # Keep only last 6 problems
+    
     conn.execute("""
     DELETE FROM dsa_problems
     WHERE id NOT IN (
@@ -169,13 +166,13 @@ def init_db():
 
     # Seed events
     events_data = [
-        ("Hackathon 2024", "24-hour coding hackathon with 50+ participants. Teams built innovative solutions.", "2024-03-15", "past", "Team ByteForce", None),
-        ("DSA Workshop Series", "6-week intensive DSA preparation workshop covering arrays to graphs.", "2024-01-20", "past", None, None),
-        ("CP Bootcamp", "Competitive programming bootcamp for beginners with hands-on practice.", "2024-02-10", "past", "Arjun Mehta", None),
-        ("LeetCode Weekly Challenge", "Weekly competitive coding challenge open to all RIT students.", "2025-03-20", "current", None, "https://leetcode.com"),
-        ("Web Dev Workshop", "Full-stack development workshop using React and Node.js.", "2025-03-25", "current", None, "https://forms.google.com"),
-        ("Inter-College CodeFest", "Annual inter-college coding competition.", "2025-04-15", "upcoming", None, None),
-        ("Open Source Contribution Drive", "Contribute to real open-source projects with mentorship.", "2025-04-22", "upcoming", None, None),
+    ("Hackathon 2024","24-hour coding hackathon with 50+ participants.","2024-03-15","past","Team ByteForce",None),
+    ("DSA Workshop Series","6-week intensive DSA preparation workshop.","2024-01-20","past",None,None),
+    ("CP Bootcamp","Competitive programming bootcamp.","2024-02-10","past","Arjun Mehta",None),
+    ("LeetCode Weekly Challenge","Weekly coding challenge.","2026-03-20","current",None,"https://leetcode.com"),
+    ("Web Dev Workshop","Full-stack development workshop.","2026-03-25","current",None,"https://forms.google.com"),
+    ("Inter-College CodeFest","Annual inter-college coding competition.","2026-04-15","upcoming",None,None),
+    ("Open Source Contribution Drive","Contribute to real open-source projects.","2026-04-22","upcoming",None,None)
     ]
     for e in events_data:
         cursor.execute("INSERT OR IGNORE INTO events (title, description, date, type, winner, registration_link) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM events WHERE title=?)",
