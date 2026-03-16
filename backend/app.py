@@ -8,6 +8,7 @@ from datetime import datetime
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
+import random
 
 load_dotenv()
 
@@ -26,22 +27,51 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-def update_today_problem():
+def ensure_today_problem():
     today = datetime.now().strftime("%Y-%m-%d")
-
     conn = get_db()
-
-    # Reset all problems
-    conn.execute("UPDATE dsa_problems SET is_today = 0")
-
-    # Set today's problem
-    conn.execute(
-        "UPDATE dsa_problems SET is_today = 1 WHERE date = ?",
+    existing = conn.execute(
+        "SELECT * FROM dsa_problems WHERE date=?",
         (today,)
+    ).fetchone()
+
+    if not existing:
+        title, difficulty, description, link = random.choice(PROBLEM_POOL)
+        conn.execute("""
+        INSERT INTO dsa_problems
+        (title,difficulty,description,practice_link,date,is_today)
+        VALUES (?,?,?,?,?,1)
+        """,(title,difficulty,description,link,today))
+        conn.execute("UPDATE dsa_problems SET is_today=0 WHERE date != ?",(today,))
+
+    conn.commit()
+    # Keep only last 6 problems
+    conn.execute("""
+    DELETE FROM dsa_problems
+    WHERE id NOT IN (
+        SELECT id FROM dsa_problems
+        ORDER BY date DESC
+        LIMIT 6
     )
+    """)
 
     conn.commit()
     conn.close()
+
+
+PROBLEM_POOL = [
+    ("Two Sum","Easy","Find two numbers that add to target","https://leetcode.com/problems/two-sum/"),
+    ("Reverse Linked List","Easy","Reverse a singly linked list","https://leetcode.com/problems/reverse-linked-list/"),
+    ("Binary Search","Easy","Find target in sorted array","https://leetcode.com/problems/binary-search/"),
+    ("Maximum Subarray","Medium","Find subarray with max sum","https://leetcode.com/problems/maximum-subarray/"),
+    ("Merge Intervals","Medium","Merge overlapping intervals","https://leetcode.com/problems/merge-intervals/"),
+    ("Climbing Stairs","Easy","Count ways to reach top","https://leetcode.com/problems/climbing-stairs/"),
+    ("Longest Substring Without Repeating Characters","Medium","Sliding window problem","https://leetcode.com/problems/longest-substring-without-repeating-characters/"),
+    ("Valid Parentheses","Easy","Check balanced parentheses","https://leetcode.com/problems/valid-parentheses/"),
+    ("Linked List Cycle","Easy","Detect cycle in linked list","https://leetcode.com/problems/linked-list-cycle/"),
+    ("Container With Most Water","Medium","Two pointer optimization","https://leetcode.com/problems/container-with-most-water/")
+    ]
+
 
 def init_db():
     conn = get_db()
@@ -150,20 +180,7 @@ def init_db():
     for e in events_data:
         cursor.execute("INSERT OR IGNORE INTO events (title, description, date, type, winner, registration_link) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM events WHERE title=?)",
                        (*e, e[0]))
-
-    # Seed DSA problems
-    problems_data = [
-        ("Two Sum", "Easy", "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target.", "https://leetcode.com/problems/two-sum/", datetime.now().strftime("%Y-%m-%d"), 1),
-        ("Reverse a Linked List", "Easy", "Reverse a singly linked list and return the reversed list.", "https://leetcode.com/problems/reverse-linked-list/", "2025-03-13", 0),
-        ("Binary Search", "Easy", "Given a sorted array and a target, implement binary search to find the target's index.", "https://leetcode.com/problems/binary-search/", "2025-03-12", 0),
-        ("Maximum Subarray", "Medium", "Find the contiguous subarray with the largest sum using Kadane's Algorithm.", "https://leetcode.com/problems/maximum-subarray/", "2025-03-11", 0),
-        ("Merge Intervals", "Medium", "Given an array of intervals, merge all overlapping intervals.", "https://leetcode.com/problems/merge-intervals/", "2025-03-10", 0),
-        ("Climbing Stairs", "Easy", "You are climbing a staircase. It takes n steps to reach the top. Each time you can climb 1 or 2 steps.", "https://leetcode.com/problems/climbing-stairs/", "2025-03-09", 0),
-    ]
-    for p in problems_data:
-        cursor.execute("INSERT OR IGNORE INTO dsa_problems (title, difficulty, description, practice_link, date, is_today) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM dsa_problems WHERE title=?)",
-                       (*p, p[0]))
-
+    
     conn.commit()
     conn.close()
 
@@ -243,30 +260,30 @@ def delete_event(event_id):
     return jsonify({"success": True})
 
 # ─── DSA PROBLEMS ────────────────────────────────────
+
 @app.route('/api/problems', methods=['GET'])
 def get_problems():
     conn = get_db()
-    problems = conn.execute("SELECT * FROM dsa_problems ORDER BY date DESC").fetchall()
+    problems = conn.execute("""
+    SELECT * FROM dsa_problems
+    WHERE is_today=0
+    ORDER BY date DESC
+    LIMIT 5
+    """).fetchall()
     conn.close()
     return jsonify([dict(p) for p in problems])
 
 @app.route('/api/problems/today', methods=['GET'])
 def get_today_problem():
-
-    update_today_problem()
-
+    ensure_today_problem()
     conn = get_db()
-
+    
     problem = conn.execute(
-        "SELECT * FROM dsa_problems WHERE is_today = 1"
+        "SELECT * FROM dsa_problems WHERE is_today=1"
     ).fetchone()
 
     conn.close()
-
-    if problem:
-        return jsonify(dict(problem))
-
-    return jsonify({}), 404
+    return jsonify(dict(problem))
 
 # ─── AI ASSISTANT ────────────────────────────────────
 AI_RESPONSES = {
