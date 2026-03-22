@@ -10,7 +10,6 @@ const navLinks = [
   { path: '/resources', label: 'Resources' },
   { path: '/dsa', label: 'DSA' },
   { path: '/collaborate', label: 'Collaborate' },
-  { path: '/ai', label: 'AI Assistant' },
   { path: '/contact', label: 'Contact' },
 ]
 

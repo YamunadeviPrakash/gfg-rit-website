@@ -11,6 +11,7 @@ import AIAssistant from './pages/AIAssistant'
 import Contact from './pages/Contact'
 import Dashboard from './pages/Dashboard'
 import Collaborate from "./pages/Collaborate"
+import FloatingAI from "./components/FloatingAI"
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           </main>
           <Footer />
         </div>
+        <FloatingAI />
       </BrowserRouter>
     </AuthProvider>
   )

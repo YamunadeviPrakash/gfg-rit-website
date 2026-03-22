@@ -111,7 +111,7 @@ export default function AIAssistant() {
   }
 
   return (
-    <div className="pt-24 pb-6 min-h-screen flex flex-col">
+    <div className="p-4 flex flex-col h-[500px]">
       <div className="max-w-3xl mx-auto px-4 w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="text-center mb-6">
