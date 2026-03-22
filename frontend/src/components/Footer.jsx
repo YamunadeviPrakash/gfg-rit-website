@@ -61,7 +61,6 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 ['/dsa', 'Daily DSA'],
-                ['/ai', 'AI Assistant'],
                 ['/contact', 'Contact'],
                 ['https://geeksforgeeks.org', 'GeeksforGeeks ↗'],
               ].map(([path, label]) => (
