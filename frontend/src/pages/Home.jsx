@@ -234,7 +234,6 @@ function joinClub(student) {
             {[
               { icon: Code, title: 'DSA Mastery', desc: 'Structured learning path from basics to advanced algorithms with daily practice problems.', color: '#00ff9c', link: '/dsa' },
               { icon: Calendar, title: 'Regular Events', desc: 'Hackathons, workshops, coding competitions, and webinars every month.', color: '#38bdf8', link: '/events' },
-              { icon: Zap, title: 'AI Coding Assistant', desc: 'Get instant explanations for coding concepts with our AI-powered chatbot.', color: '#a78bfa', link: '/ai' },
               { icon: Users, title: 'Community', desc: 'Connect with 100+ like-minded coders and experienced seniors from RIT.', color: '#fb923c', link: '/' },
               { icon: BookOpen, title: 'Learning Resources', desc: 'Curated DSA resources, coding platforms, and beginner learning paths.', color: '#f472b6', link: '/resources' },
               { icon: TrendingUp, title: 'Career Growth', desc: 'Interview prep, resume reviews, and placement support from our alumni network.', color: '#34d399', link: '/about' },
