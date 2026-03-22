@@ -53,8 +53,8 @@ export default function Navbar() {
                 to={path}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   location.pathname === path
-                    ? 'text-[#00ff9c] bg-[#00ff9c]/10'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    ? 'text-[#00ff9c] bg-[#00ff9c]/10 shadow-[0_0_10px_#00ff9c33]'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5 hover:shadow-[0_0_8px_#00ff9c22]'
                 }`}
               >
                 {label}

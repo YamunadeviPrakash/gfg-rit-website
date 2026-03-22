@@ -34,7 +34,7 @@ export default function Footer() {
                 className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center hover:bg-[#00ff9c]/10 hover:text-[#00ff9c] text-slate-400 transition-all">
                 <Mail size={16} />
               </a>
-              <a href="https://chat.whatsapp.com/your-group-link" target="_blank" rel="noreferrer"
+              <a href="https://chat.whatsapp.com/HZjaf6LCpEPCvgiJkdQxi8" target="_blank" rel="noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center hover:bg-green-500/10 hover:text-green-400 text-slate-400 transition-all">
                 <MessageCircle size={16} />
               </a>
@@ -79,7 +79,7 @@ export default function Footer() {
 
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-500 text-sm">
-            © 2025 GFG Campus Club – RIT. All rights reserved.
+            © 2026 GFG Campus Club – RIT. All rights reserved.
           </p>
           <p className="text-slate-600 text-xs font-mono">
             Built with <span className="text-[#00ff9c]">{'<Code />'}</span> & ☕
