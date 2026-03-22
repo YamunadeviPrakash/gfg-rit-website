@@ -98,6 +98,16 @@ def init_db():
     ''')
 
     cursor.execute('''
+        CREATE TABLE IF NOT EXISTS event_feedback (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_id INTEGER,
+            message TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(event_id) REFERENCES events(id)
+        )
+    ''')
+
+    cursor.execute('''
         CREATE TABLE IF NOT EXISTS contacts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
@@ -255,6 +265,30 @@ def delete_event(event_id):
     conn.commit()
     conn.close()
     return jsonify({"success": True})
+
+# ─── EVENT FEEDBACK ─────────────────────
+
+@app.route('/api/events/<int:event_id>/feedback', methods=['POST'])
+def add_feedback(event_id):
+    data = request.json
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO event_feedback (event_id, message) VALUES (?,?)",
+        (event_id, data['message'])
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True})
+
+@app.route('/api/events/<int:event_id>/feedback', methods=['GET'])
+def get_feedback(event_id):
+    conn = get_db()
+    feedback = conn.execute(
+        "SELECT * FROM event_feedback WHERE event_id=? ORDER BY created_at DESC",
+        (event_id,)
+    ).fetchall()
+    conn.close()
+    return jsonify([dict(f) for f in feedback])
 
 # ─── DSA PROBLEMS ────────────────────────────────────
 

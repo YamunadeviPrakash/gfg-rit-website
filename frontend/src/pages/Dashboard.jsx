@@ -173,6 +173,7 @@ function EventForm({ initial, onSave, onCancel }) {
 function DashboardMain() {
   const { coordinator, logout } = useAuth()
   const [events, setEvents] = useState([])
+  const [feedback, setFeedback] = useState({})
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -202,6 +203,17 @@ function DashboardMain() {
     } catch {
       showToast('Failed to create event', 'error')
     }
+  }
+
+  const fetchFeedback = async (eventId) => {
+    const res = await axios.get(
+      `/api/events/${eventId}/feedback`
+    )
+    setFeedback(prev => ({
+      ...prev,
+      [eventId]: res.data
+    }))
+
   }
 
   const handleUpdate = async (form) => {
@@ -234,11 +246,10 @@ function DashboardMain() {
       <div className="max-w-5xl mx-auto px-6">
         {/* Toast */}
         {toast && (
-          <div className={`fixed top-20 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-xl transition-all ${
-            toast.type === 'error'
+          <div className={`fixed top-20 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-xl transition-all ${toast.type === 'error'
               ? 'bg-red-900/90 border border-red-500/30 text-red-300'
               : 'bg-[#1e293b] border border-[#00ff9c]/30 text-[#00ff9c]'
-          }`}>
+            }`}>
             {toast.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle size={16} />}
             <span className="text-sm">{toast.msg}</span>
           </div>
@@ -342,6 +353,33 @@ function DashboardMain() {
                     </div>
                     <p className="text-xs text-slate-500 mb-1">{new Date(event.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     <p className="text-sm text-slate-400 truncate">{event.description}</p>
+                    {event.type === "past" && (
+                      <div className="mt-3">
+                        <button
+                          onClick={() => fetchFeedback(event.id)}
+                          className="text-xs text-[#38bdf8] flex items-center gap-1 hover:text-[#00ff9c] transition"
+                        >
+                          💬 View Feedback
+                          {feedback[event.id]?.length > 0 && (
+                            <span className="ml-1 text-slate-400">
+                              ({feedback[event.id].length})
+                            </span>
+                          )}
+                        </button>
+                        {feedback[event.id]?.length > 0 && (
+                          <div className="mt-2 space-y-2">
+                            {feedback[event.id].map(f => (
+                              <div
+                                key={f.id}
+                                className="bg-[#020617] border border-white/10 p-2 rounded text-sm text-slate-300"
+                              >
+                                {f.message}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <button onClick={() => { setEditing(event); setShowForm(false) }}
